@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+    form{
+        width: 90%;
+    margin-left: 20px;
+    margin-top: 10px;
+    }
+    .input-group{
+    padding:5px;
+    }
+    h5{
+border-bottom: 3px solid #0d6efd;
+    width: 70%;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    }
+            input,select{
+        margin: 4px;
+        }
+        .btn-primary{
+        padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    }
+
+    </style>
+    <script>
+    function disableAll() {
+        var occupancySelect = document.getElementById('occupancy');
+        var singleOccupancyFields = document.getElementById('totalSingleOccupancyRooms');
+        var doubleOccupancyFields = document.getElementById('totalDoubleOccupancyRooms');
+        var tripleOccupancyFields = document.getElementById('totalTripleOccupancyRooms');
+        var singleRentField = document.getElementById('singleOccupancyRent');
+        var doubleRentField = document.getElementById('doubleOccupancyRent');
+        var tripleRentField = document.getElementById('TripleOccupancyRent');
+
+        // Disable all fields initially
+        singleOccupancyFields.disabled = true;
+        doubleOccupancyFields.disabled = true;
+        tripleOccupancyFields.disabled = true;
+        singleRentField.disabled = true;
+        doubleRentField.disabled = true;
+        tripleRentField.disabled = true;
+
+        // Add a class to visually indicate disabled fields
+        singleOccupancyFields.classList.add('disabled');
+        doubleOccupancyFields.classList.add('disabled');
+        tripleOccupancyFields.classList.add('disabled');
+        singleRentField.classList.add('disabled');
+        doubleRentField.classList.add('disabled');
+        tripleRentField.classList.add('disabled');
+
+        // Set default value for occupancy select
+        occupancySelect.value = "SINGLE";
+
+        // Trigger the change event handler to reflect the initial state
+        handleOccupancyChange();
+    }
+
+    function handleOccupancyChange() {
+        var occupancySelect = document.getElementById('occupancy');
+        var singleOccupancyFields = document.getElementById('totalSingleOccupancyRooms');
+        var doubleOccupancyFields = document.getElementById('totalDoubleOccupancyRooms');
+        var tripleOccupancyFields = document.getElementById('totalTripleOccupancyRooms');
+        var singleRentField = document.getElementById('singleOccupancyRent');
+        var doubleRentField = document.getElementById('doubleOccupancyRent');
+        var tripleRentField = document.getElementById('TripleOccupancyRent');
+        var totalRooms = document.getElementById('totalRooms');
+
+        if (occupancySelect.value === 'SINGLE') {
+            // If SINGLE is chosen, disable relevant fields and add a disabled class for styling
+            singleOccupancyFields.disabled = false;
+            doubleOccupancyFields.disabled = true;
+            tripleOccupancyFields.disabled = true;
+            singleRentField.disabled = false;
+            doubleRentField.disabled = true;
+            tripleRentField.disabled = true;
+
+            doubleOccupancyFields.classList.add('disabled');
+            tripleOccupancyFields.classList.add('disabled');
+            doubleRentField.classList.add('disabled');
+            tripleRentField.classList.add('disabled');
+        } else if (occupancySelect.value === 'DOUBLE') {
+            singleOccupancyFields.disabled = true;
+            doubleOccupancyFields.disabled = false;
+            tripleOccupancyFields.disabled = true;
+            tripleRentField.disabled = true;
+            singleRentField.disabled = true;
+            doubleRentField.disabled = false;
+
+            singleOccupancyFields.classList.add('disabled');
+            tripleOccupancyFields.classList.add('disabled');
+            singleRentField.classList.add('disabled');
+            tripleRentField.classList.add('disabled');
+        } else if (occupancySelect.value === 'TRIPLE') {
+            singleOccupancyFields.disabled = true;
+            doubleOccupancyFields.disabled = true;
+            tripleOccupancyFields.disabled = false;
+            singleRentField.disabled = true;
+            doubleRentField.disabled = true;
+            tripleRentField.disabled = false;
+
+            singleOccupancyFields.classList.add('disabled');
+            doubleOccupancyFields.classList.add('disabled');
+            singleRentField.classList.add('disabled');
+            doubleRentField.classList.add('disabled');
+        } else {
+            singleOccupancyFields.disabled = false;
+            doubleOccupancyFields.disabled = false;
+            tripleOccupancyFields.disabled = false;
+            doubleRentField.disabled = false;
+            tripleRentField.disabled = false;
+            singleRentField.disabled = false;
+
+            doubleOccupancyFields.classList.remove('disabled');
+            singleOccupancyFields.classList.remove('disabled');
+            tripleOccupancyFields.classList.remove('disabled');
+            doubleRentField.classList.remove('disabled');
+            singleRentField.classList.remove('disabled');
+            tripleRentField.classList.remove('disabled');
+        }
+
+    }
+
+        function validateTotalRooms() {
+        var totalRooms = parseInt(document.getElementById('totalRooms').value) || 0;
+        var totalSingleOccupancyRooms = parseInt(document.getElementById('totalSingleOccupancyRooms').value) || 0;
+        var totalDoubleOccupancyRooms = parseInt(document.getElementById('totalDoubleOccupancyRooms').value) || 0;
+        var totalTripleOccupancyRooms = parseInt(document.getElementById('totalTripleOccupancyRooms').value) || 0;
+
+        if (totalRooms !== totalSingleOccupancyRooms + totalDoubleOccupancyRooms + totalTripleOccupancyRooms) {
+            alert("Total rooms count must be equal to the sum of single, double, and triple occupancy rooms!");
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
+    }
+
+
+    </script>
+
+</head>
+<body onload="disableAll()">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">coliving <b style="color:#0d6efd;">spacemanager</b></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Spaces
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/spacemanager/overview">Overview</a></li>
+                        <li><a class="dropdown-item" href="/spacemanager/addColivingSpace">List New Coliving Space</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/spacemanager/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<form th:action="@{/spacemanager/addColivingSpace}" method="post" onsubmit="return validateTotalRooms()">
+    <br/>
+    <h5 style="text-align:center;">List New Coliving Space</h5>
+    <br/>
+    <input required class="form-control form-control-sm" pattern="^[a-zA-Z0-9\s]*$" id="propertyName"
+           name="propertyName" type="text" minlength="4" maxlength="50"
+           placeholder="What's your coliving space be called?" aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" pattern="^[a-zA-Z0-9\s]*$" id="address" name="address"
+           type="text" minlength="10" maxlength="200" placeholder="Where it's located? Provide complete address."
+           aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" pattern="^[a-zA-Z0-9\s]*$" id="ownerName" name="ownerName"
+           type="text" maxlength="100" minlength="4" placeholder="Who owns it?" aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" id="ownerContactNumber" name="ownerContactNumber" type="text"
+           placeholder="What's the contact number of coliving space? Eg: 0123456789" pattern="^\d{10}$"
+           aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" id="spaceManagerCode" name="spaceManagerCode" type="text"
+           placeholder="What's your space manager code? Eg: CLM1234567" pattern="^[A-Z0-9]*$"
+           aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" id="totalRooms" name="totalRooms" type="number" min="1"
+           max="100" placeholder="How many total rooms are there?" aria-label=".form-control-sm example">
+    <select required class="form-select form-select-sm" aria-label="Occupancies available" id="occupancy"
+            name="occupancy" onchange="handleOccupancyChange()">
+        <option value="SINGLE">Single Occupancy</option>
+        <option value="DOUBLE">Double Occupancy</option>
+        <option value="TRIPLE">Triple Occupancy</option>
+        <option value="ALL">All Occupancies</option>
+    </select>
+    <input class="form-control form-control-sm disabled" id="totalSingleOccupancyRooms" name="totalSingleOccupancyRooms"
+           type="number" min="1" max="100" placeholder="Single occupancy rooms count?"
+           aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm disabled" id="totalDoubleOccupancyRooms" name="totalDoubleOccupancyRooms"
+           type="number" min="1" max="100" placeholder="Double occupancy rooms count?"
+           aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm disabled" id="totalTripleOccupancyRooms" name="totalTripleOccupancyRooms"
+           type="number" min="1" max="100" placeholder="Triple occupancy rooms count?"
+           aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm disabled" id="singleOccupancyRent" name="singleOccupancyRent"
+           type="number" min="100" max="100000" placeholder="Single occupancy rent? ₹"
+           aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm disabled" id="doubleOccupancyRent" name="doubleOccupancyRent"
+           type="number" min="100" max="100000" placeholder="Double occupancy rent? ₹"
+           aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm disabled" id="TripleOccupancyRent" name="TripleOccupancyRent"
+           type="number" min="100" max="100000" placeholder="Triple occupancy rent? ₹"
+           aria-label=".form-control-sm example">
+    <input required class="form-control form-control-sm" id="securityDeposit" name="securityDeposit" type="number"
+           min="100" max="100000" placeholder="How much is security deposit? ₹" aria-label=".form-control-sm example">
+    <br/>
+    <button type="submit" class="btn btn-primary">Send for approval</button>
+    <button type="reset" class="btn btn-primary">Reset</button>
+</form>
+<br/><br/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
